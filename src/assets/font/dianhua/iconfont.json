@@ -1,0 +1,16 @@
+{
+  "id": "1705668",
+  "name": "图书馆座位预约系统",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "16043183",
+      "name": "电 话",
+      "font_class": "dianhua",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    }
+  ]
+}
