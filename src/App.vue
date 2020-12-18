@@ -1,8 +1,11 @@
 <template>
   <div id="app">
     <HeadFor></HeadFor>
-    <my-nav></my-nav>
+    <my-nav @showRegisterDialog="registerDialog"></my-nav>
     <router-view></router-view>
+    <el-dialog title="注册" :visible.sync="dialogTableVisible" >
+      <login></login>
+    </el-dialog>
   </div>
 </template>
 
@@ -10,6 +13,7 @@
 import HelloWorld from './components/HelloWorld.vue';
 import HeadFor from './components/HeadFor.vue';
 import MyNav from './components/MyNav.vue';
+import Login from './components/Login.vue'
 
 export default {
   name: 'App',
@@ -17,13 +21,22 @@ export default {
     HelloWorld,
     HeadFor,
     MyNav,
+    Login
   },
   methods: {
-    
+    registerDialog(data){
+      this.dialogTableVisible = true;
+    }
   },
   created(){
     this.$router.replace('/index');
+    console.log(this.baseUrl());
   },
+  data(){
+    return {
+      dialogTableVisible: false
+    }
+  }
 }
 </script>
 

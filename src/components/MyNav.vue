@@ -5,7 +5,7 @@
             <el-menu-item index="2">资讯</el-menu-item>
             <el-menu-item index="3">开放式股票基金</el-menu-item>
             <el-menu-item index="4">开户</el-menu-item>
-            <el-button type="text" class="login register">注册</el-button>
+            <el-button type="text" class="login register" @click="register">注册</el-button>
             <el-button type="text" class="login"> </el-button>
             <el-button type="text" class="login">登录</el-button>
         </el-menu>
@@ -32,6 +32,9 @@ methods:{
     },
     goto: function(path) {
         this.$router.replace(path);
+    },
+    register: function() {
+        this.$emit('showRegisterDialog', true);
     }
 }
 
