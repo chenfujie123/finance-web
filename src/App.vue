@@ -1,10 +1,13 @@
 <template>
   <div id="app">
     <HeadFor></HeadFor>
-    <my-nav @showRegisterDialog="registerDialog"></my-nav>
+    <my-nav @showRegisterDialog="registerDialog" @showloginDialog="loginDialog" v-bind="loginData"></my-nav>
     <router-view></router-view>
     <el-dialog title="注册" :visible.sync="dialogTableVisible" >
-      <login></login>
+      <login @changeLogin="changeForLogin"></login>
+    </el-dialog>
+    <el-dialog title="登录" :visible.sync="dialogloginVisible" >
+      <for-login @changeLogin="changeForLogin"></for-login>
     </el-dialog>
   </div>
 </template>
@@ -13,7 +16,8 @@
 import HelloWorld from './components/HelloWorld.vue';
 import HeadFor from './components/HeadFor.vue';
 import MyNav from './components/MyNav.vue';
-import Login from './components/Login.vue'
+import Login from './components/Login.vue';
+import ForLogin from './components/ForLogin.vue'
 
 export default {
   name: 'App',
@@ -21,11 +25,20 @@ export default {
     HelloWorld,
     HeadFor,
     MyNav,
-    Login
+    Login,
+    ForLogin
   },
   methods: {
     registerDialog(data){
       this.dialogTableVisible = true;
+    },
+    loginDialog(data){
+      this.dialogloginVisible = true;
+    },
+    changeForLogin(data) {
+      this.loginData = data;
+      this.dialogTableVisible = false;
+      this.dialogloginVisible = false;
     }
   },
   created(){
@@ -34,7 +47,9 @@ export default {
   },
   data(){
     return {
-      dialogTableVisible: false
+      dialogTableVisible: false,
+      dialogloginVisible: false,
+      loginData: {isLogin: true, userName: ''},
     }
   }
 }

@@ -19,10 +19,7 @@ import Qs from 'qs';
 export default {
    data() {
       return {
-          form: {
-            //   name:'',
-            //   passwd:''
-          }
+          form:{}
       }
    },
    activated() {
@@ -37,14 +34,14 @@ export default {
         submitForm: async function(){
             var data = Qs.stringify(this.form);
             let resultData;
-            await this.$http.post('/login', data)
+            await this.$http.post('/forlogin', data)
                 .then( function(res){
                     resultData = res.data
                 })
             if (resultData.status == 1) {
                 this.$message({
                     type:'success',
-                    message: '注册成功',
+                    message: '登录成功',
                     duration: 1000
                 });
                 sessionStorage.token_for_finance = resultData.token_for_finance;
