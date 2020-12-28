@@ -1,13 +1,26 @@
 <template>
     <div class="content">
         <el-form label-width="80px" :model="form" class="e-form" :rules="rules" >
-            <el-form-item label="姓名" prop="name">
+            <el-form-item label="姓名" prop="name" label-width="100px">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="身份证号" prop="number">
+            <el-form-item label="身份证号" prop="number" label-width="100px">
                 <el-input v-model="form.number"></el-input>
             </el-form-item>
-            <el-form-item label="身份证正面" prop="number">
+            <el-form-item label="身份证正面" prop="number" label-width="100px">
+            </el-form-item>
+            <el-upload
+                class="avatar-uploader"
+                action="/api/uploadimg"
+                headers=""
+                :data="extrDataForP"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload">
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+            <el-form-item label="身份证反面" prop="number" label-width="100px">
             </el-form-item>
             <el-upload
                 class="avatar-uploader"
@@ -22,11 +35,13 @@
     </div>
 </template>
 <script>
+import Qs from 'qs';
 export default {
    data() {
       return {
+          imageUrl:"",
           form: {
-              imageUrl:""
+              
           },
           rules: {
               name:[
@@ -37,6 +52,14 @@ export default {
                   {required: true, message:"请输入身份证号", trigger: "blur"},
                   {min: 18, max: 5, message:"请输入18位数的身份证号"}
               ]
+          },
+          extrDataForP:[
+              sessionStorage.token_for_finance,
+              1
+          ],
+          extrDataForN:{
+              token: sessionStorage.token_for_finance,
+              type: 0
           }
       }
    },
@@ -47,6 +70,7 @@ export default {
     created(){
     },
     mounted(){
+        // this.extrDataForP = Qs.stringify(this.extrDataForP);
     },
     methods:{
         handleAvatarSuccess(res, file) {
@@ -54,15 +78,17 @@ export default {
         },
         beforeAvatarUpload(file) {
             const isJPG = file.type === 'image/jpeg';
+            const isPNG = file.type === 'image/png';
             const isLt2M = file.size / 1024 / 1024 < 2;
 
-            if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
+            if (!isJPG && !isPNG) {
+                this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+                console.log(file.type);
             }
             if (!isLt2M) {
                 this.$message.error('上传头像图片大小不能超过 2MB!');
             }
-            return isJPG && isLt2M;
+            return (isJPG || isPNG) && isLt2M;
       }
     }
 
@@ -72,12 +98,12 @@ export default {
 <style scoped>
 .content {
     width: 1200px;
-    height: 600px;
     margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
     /* background-color: aqua; */
     overflow: hidden;
+    padding-bottom: 60px;
 }
 .e-form {
     /* background-color: red; */
