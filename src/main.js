@@ -17,6 +17,7 @@ axios.defaults.baseURL = '/api';
 axios.interceptors.request.use(config => {
   // 表示在配置中的设置头消息的字段Authorization为从本地获取的token值
   config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+  config.headers['token'] = sessionStorage.token_for_finance;
   return config
 })
 Vue.config.productionTip = false

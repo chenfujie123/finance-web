@@ -12,25 +12,28 @@
             <el-upload
                 class="avatar-uploader"
                 action="/api/uploadimg"
-                headers=""
-                :data="extrDataForP"
+                :headers="myHeadersP"
                 :show-file-list="false"
-                :on-success="handleAvatarSuccess"
+                :on-success="handleAvatarSuccessP"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <img v-if="imageUrlP" :src="imageUrlP" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <el-form-item label="身份证反面" prop="number" label-width="100px">
             </el-form-item>
             <el-upload
                 class="avatar-uploader"
-                action=""
+                action="/api/uploadimg"
+                :headers="myHeadersN"
                 :show-file-list="false"
-                :on-success="handleAvatarSuccess"
+                :on-success="handleAvatarSuccessN"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <img v-if="imageUrlN" :src="imageUrlN" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
+            <el-form-item style="margin-top: 40px; margin-left: 40px;">
+                <el-button type="primary" @click="submitForm">提交</el-button>
+            </el-form-item>
         </el-form>
     </div>
 </template>
@@ -39,7 +42,8 @@ import Qs from 'qs';
 export default {
    data() {
       return {
-          imageUrl:"",
+          imageUrlP:"",
+          imageUrlN:"",
           form: {
               
           },
@@ -53,13 +57,13 @@ export default {
                   {min: 18, max: 5, message:"请输入18位数的身份证号"}
               ]
           },
-          extrDataForP:[
-              sessionStorage.token_for_finance,
-              1
-          ],
-          extrDataForN:{
-              token: sessionStorage.token_for_finance,
-              type: 0
+          myHeadersP:{
+              Token: sessionStorage.token_for_finance,
+              Type: 1
+          },
+          myHeadersN:{
+              Token: sessionStorage.token_for_finance,
+              Type: 0
           }
       }
    },
@@ -73,9 +77,15 @@ export default {
         // this.extrDataForP = Qs.stringify(this.extrDataForP);
     },
     methods:{
-        handleAvatarSuccess(res, file) {
-            
+        //上传身份证正面的回调
+        handleAvatarSuccessP(res, file) {
+            this.imageUrlP = res.img_src;
         },
+        //上传身份证反面的回调
+        handleAvatarSuccessN(res, file) {
+            this.imageUrlN = res.img_src;
+        },
+        //上传身份证图片前的处理函数
         beforeAvatarUpload(file) {
             const isJPG = file.type === 'image/jpeg';
             const isPNG = file.type === 'image/png';
@@ -89,7 +99,26 @@ export default {
                 this.$message.error('上传头像图片大小不能超过 2MB!');
             }
             return (isJPG || isPNG) && isLt2M;
-      }
+        },
+        //提交表单信息
+        submitForm: async function(){
+            if (!this.imageUrlP || !this.imageUrlN) {
+                this.$message.error('请上传身份证');
+                return;
+            }
+            if (!this.form.name || !this.form.number) {
+                this.$message.error('请完善信息');
+            }
+            var data = Qs.stringify(this.form);
+            var resultData;
+            await this.$http.post('/realnameform', data).then(function(res){
+                resultData = res.data;
+            });
+            if (resultData.status == 1) {
+                this.$message.success('提交成功');
+            }
+        }
+
     }
 
 
