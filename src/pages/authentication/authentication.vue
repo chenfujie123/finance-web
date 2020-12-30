@@ -75,6 +75,10 @@ export default {
     },
     mounted(){
         // this.extrDataForP = Qs.stringify(this.extrDataForP);
+        console.log(this.$route.params.isLogin);
+        this.$http.post('', data).then(function (res) {
+            
+        })
     },
     methods:{
         //上传身份证正面的回调

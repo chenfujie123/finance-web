@@ -4,7 +4,7 @@
             <el-menu-item index="1" @click="goto('/index')">首页</el-menu-item>
             <el-menu-item index="2">资讯</el-menu-item>
             <el-menu-item index="3">开放式股票基金</el-menu-item>
-            <el-menu-item index="4" @click="goto('/authentication')">开户</el-menu-item>
+            <el-menu-item index="4" @click="gotoAuthentication('authentication')">开户</el-menu-item>
             <el-button type="text" class="login register" @click="register" v-if="isLoginLocal">注册</el-button>
             <el-button type="text" class="login" v-if="isLoginLocal"> </el-button>
             <el-button type="text" class="login" @click="login" v-if="isLoginLocal">登录</el-button>
@@ -54,13 +54,17 @@ export default {
         }
     },
     mounted(){
+        
     },
     methods:{
         login: function (){
             this.$emit('showloginDialog', true);
         },
         goto: function(path) {
-            this.$router.replace(path);
+            this.$router.push(path);
+        },
+        gotoAuthentication: function(path) {
+            this.$router.push({name:path, params: {isLogin: this.isLoginLocal}});
         },
         register: function() {
             this.$emit('showRegisterDialog', true);
