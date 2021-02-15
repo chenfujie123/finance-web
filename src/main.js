@@ -6,11 +6,16 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios';
 import globalV from './config/globalV.js';
 import Qs from 'qs'
+import echarts from 'echarts'
 
 
 Vue.use(globalV);
 
 
+//echarts封装
+Vue.prototype.$echarts = echarts
+
+//axios封装
 Vue.prototype.$http = axios;
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = '/api';

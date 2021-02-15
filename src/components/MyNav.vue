@@ -3,7 +3,7 @@
         <el-menu :default-active="activeIndex" class="el-menu-nav" mode="horizontal" @select="handleSelect" background-color="#F4F4F4">
             <el-menu-item index="1" @click="goto('/index')">首页</el-menu-item>
             <el-menu-item index="2">资讯</el-menu-item>
-            <el-menu-item index="3">开放式股票基金</el-menu-item>
+            <el-menu-item index="3" @click="goto('/fund')">开放式股票基金</el-menu-item>
             <el-menu-item index="4" @click="gotoAuthentication('authentication')">开户</el-menu-item>
             <el-button type="text" class="login register" @click="register" v-if="isLoginLocal">注册</el-button>
             <el-button type="text" class="login" v-if="isLoginLocal"> </el-button>

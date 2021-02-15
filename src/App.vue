@@ -42,8 +42,8 @@ export default {
     }
   },
   created(){
-    this.$router.replace('/index');
-    console.log(this.baseUrl());
+    // this.$router.replace('/index');
+    this.$router.replace('/fundDetail');
   },
   data(){
     return {

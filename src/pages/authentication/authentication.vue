@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <el-form label-width="80px" :model="form" class="e-form" :rules="rules" >
+        <el-form label-width="80px" :model="form" class="e-form" :rules="rules" v-if="authenticationStatus == 1 || authenticationStatus == 4">
             <el-form-item label="姓名" prop="name" label-width="100px">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
@@ -35,6 +35,14 @@
                 <el-button type="primary" @click="submitForm">提交</el-button>
             </el-form-item>
         </el-form>
+        <div class="ing" v-else-if="authenticationStatus == 2">
+            <i class="iconfontdaishenhe icondaishenhe icon-for-ing"></i>
+            <p class="shen-he-text">我们将在1~2个工作日内进行审核，请耐心等待</p>
+        </div>
+        <div class="ing" v-else-if="authenticationStatus == 3">
+            <i class="iconfontshenhetongguo iconshenhetongguo icon-for-ing"></i>
+            <p class="shen-he-text">恭喜！审核通过！</p>
+        </div>
     </div>
 </template>
 <script>
@@ -47,6 +55,7 @@ export default {
           form: {
               
           },
+          authenticationStatus: null,
           rules: {
               name:[
                   {required: true, message:"请输入姓名", trigger: "blur"},
@@ -73,12 +82,15 @@ export default {
     },
     created(){
     },
-    mounted(){
+    async mounted(){
         // this.extrDataForP = Qs.stringify(this.extrDataForP);
         console.log(this.$route.params.isLogin);
-        this.$http.post('', data).then(function (res) {
-            
+        var resultData;
+        await this.$http.post('/realnamestatus').then(function (res) {
+            resultData = res.data;
         })
+        this.authenticationStatus = resultData.status;
+        console.log(this.authenticationStatus);
     },
     methods:{
         //上传身份证正面的回调
@@ -120,6 +132,7 @@ export default {
             });
             if (resultData.status == 1) {
                 this.$message.success('提交成功');
+                this.authenticationStatus = 2;
             }
         }
 
@@ -129,6 +142,8 @@ export default {
 }
 </script>
 <style scoped>
+@import "../../assets/font/daishenhe/iconfont.css";
+@import "../../assets/font/shenhetongguo/iconfont.css";
 .content {
     width: 1200px;
     margin-top: 10px;
@@ -170,6 +185,21 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+}
+.ing {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+.icon-for-ing {
+    font-size: 80px;
+}
+.shen-he-text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    margin-top: 20px;
 }
 </style>
 

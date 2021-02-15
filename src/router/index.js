@@ -3,6 +3,8 @@ import Vue from 'vue'
 
 import Index from '../pages/home/index.vue';
 import Authentication from '../pages/authentication/authentication.vue';
+import Fund from '../components/Fund.vue';
+import fundDetail from '../pages/fund-detail'
 
 
 Vue.use(VueRouter)
@@ -10,7 +12,7 @@ Vue.use(VueRouter)
 const routes = [
     //主页路由
     {
-        path: '/index', 
+        path: '/index',
         component: Index,
         name: 'index'
     },
@@ -21,13 +23,25 @@ const routes = [
         name: 'authentication',
         beforeEnter: (to, from, next) => {
             if (to.params.isLogin) {
-                console.log(to.params.isLogin);
+                alert("请先登录")
                 next(false);
             } else {
                 next();
             }
         }
     },
+    //基金页
+    {
+        path: '/fund',
+        component: Fund,
+        name: 'fund'
+    },
+    //基金详情页
+    {
+        path: '/fundDetail',
+        component: fundDetail,
+        name: 'fundDetail'
+    }
 ]
 
 const router = new VueRouter({
